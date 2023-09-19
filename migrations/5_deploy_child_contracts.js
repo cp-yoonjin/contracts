@@ -8,9 +8,12 @@ module.exports = async function(deployer, network, accounts) {
   console.log(deployer.network)
 
   deployer.then(async() => {
-    const childChainManager = await deployer.deploy(ChildChainManager)
-    const childChainManagerProxy = await deployer.deploy(ChildChainManagerProxy, '0x0000000000000000000000000000000000000000')
-    await childChainManagerProxy.updateAndCall(ChildChainManager.address, childChainManager.contract.methods.initialize(accounts[0]).encodeABI())
+    {
+      const childChainManager = await deployer.deploy(ChildChainManager)
+      const childChainManagerProxy = await deployer.deploy(ChildChainManagerProxy, '0x0000000000000000000000000000000000000000')
+      console.log('* accounts[0]: ', accounts[0])
+      await childChainManagerProxy.updateAndCall(ChildChainManager.address, await childChainManager.contract.methods.initialize(accounts[0]).encodeABI())
+    }
 
     const contractAddresses = utils.getContractAddresses()
 
@@ -27,7 +30,7 @@ module.exports = async function(deployer, network, accounts) {
     //   await meta.initialize(ChildChainManager.address, contractAddresses.root.tokens.META)
     // }
 
-    const ChildChainManagerInstance = await ChildChainManager.at(ChildChainManagerProxy.address)
+    const ChildChainManagerInstance = await ChildChainManager.at(ChildChainManager.address)
     await ChildChainManagerInstance.mapToken(contractAddresses.root.tokens.META, MetaLockable.address, false)
 
     contractAddresses.child = {

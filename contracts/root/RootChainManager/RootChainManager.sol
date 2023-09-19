@@ -219,10 +219,10 @@ contract RootChainManager is
      * @param depositData bytes data that is sent to predicate and child token contracts to handle deposit
      */
     function depositFor(address user, address rootToken, bytes calldata depositData) external {
-        require(
-            rootToken != ETHER_ADDRESS,
-            "RootChainManager: INVALID_ROOT_TOKEN"
-        );
+//        require(
+//            rootToken != ETHER_ADDRESS,
+//            "RootChainManager: INVALID_ROOT_TOKEN"
+//        );
         _depositFor(user, rootToken, depositData);
     }
 
@@ -253,25 +253,18 @@ contract RootChainManager is
             "RootChainManager: INVALID_USER"
         );
 
-        //TODO depositFor amount decoding
+        // depositFor amount decoding
         uint256 amount = abi.decode(depositData, (uint256));
 
-        //TODO 토큰 설정
+        // 토큰 설정
         META meta = META(rootToken);
 
-        //TODO 사용자 -> 이 컨트랙트 토큰 트랜스퍼
+        // 사용자 -> 이 컨트랙트 토큰 트랜스퍼
         meta.transferFrom(user, address(this), amount);
 
         meta.burn(address(this), amount);
 
-        //TODO burn으로
-//        ITokenPredicate(predicateAddress).lockTokens(
-//            _msgSender(),
-//            user,
-//            rootToken,
-//            depositData
-//        );
-
+        //TODO 두번째 테스트 state sync event 잘 되는가
         bytes memory syncData = abi.encode(user, rootToken, depositData);
         _stateSender.syncState(
             childChainManagerAddress,

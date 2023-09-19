@@ -42,7 +42,8 @@ async function stake() {
   // pubkey 4
   // const pubkey = '0x6791b1e34ab725c6ff2164a388a50d05b27b86252efc6b839193017ee25c31232bfbdd173f5e43de2bd6cbc0a68df9b2449e4cab1786ae470f3a1d5b733c496a'
 
-  const stakeAmount = web3.utils.toWei('100000')
+  // TODO 10000000 META 스테이킹 되어야함
+  const stakeAmount = web3.utils.toWei('10000000')
   const heimdallFee = web3.utils.toWei('1')
   console.log(`Staking ${stakeAmount} for ${validatorAccount}...`)
 
@@ -51,7 +52,7 @@ async function stake() {
   console.log({ stakeManager: stakeManager.address, META: RootToken.address, stakeToken: await stakeManager.token() })
   console.log('Sender accounts has a balanceOf', (await meta.balanceOf(accounts[0])).toString())
   console.log('currentValidatorSetSize: ', (await stakeManager.currentValidatorSetSize()).toString())
-  await meta.approve(stakeManager.address, web3.utils.toWei('1000000'))
+  await meta.approve(stakeManager.address, web3.utils.toWei('10000001'))
   console.log('sent approve tx, staking now...')
   // Remember to change the 4th parameter to false if delegation is not required
   await stakeManager.stakeFor(validatorAccount, stakeAmount, heimdallFee, false, pubkey)

@@ -30,7 +30,7 @@ async function withdraw() {
   // pubkey 1
   const pubkey = '0x8d56d87962ad90b5a70c42498c610d3c5b84cff3c14fab5c64c8e8562076302fc9b97edeb4c63efe60a41e7cd72afd59002b49b9301743812e8a5cdfd49890a9'
 
-  const withdrawAmount = web3.utils.toWei('1000')
+  const withdrawAmount = web3.utils.toWei('10000000')
   // const heimdallFee = web3.utils.toWei('1')
   console.log(`Withdraw ${withdrawAmount} for Layer1...`)
 

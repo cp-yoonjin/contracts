@@ -27,14 +27,14 @@ module.exports = async function(deployer, network, accounts) {
     //   ).encodeABI()
     // )
 
-    await governance.update(
-      registry.address,
-      registry.contract.methods.mapToken(
-        contractAddresses.root.tokens.META,
-        contractAddresses.child.tokens.META,
-        false /* isERC721 */
-      ).encodeABI()
-    )
+    // await governance.update(
+    //   registry.address,
+    //   registry.contract.methods.mapToken(
+    //     contractAddresses.root.tokens.META,
+    //     contractAddresses.child.tokens.META,
+    //     false /* isERC721 */
+    //   ).encodeABI()
+    // )
 
     // await governance.update(
     //   registry.address,
@@ -63,7 +63,7 @@ module.exports = async function(deployer, network, accounts) {
     )
 
     const stateSenderContract = await StateSender.at(contractAddresses.root.StateSender)
-    await stateSenderContract.register(contractAddresses.root.RootChainManagerProxy, contractAddresses.child.ChildChainManagerProxy)
+    await stateSenderContract.register(contractAddresses.root.RootChainManager, contractAddresses.child.ChildChainManager)
 
     const RootChainManagerInstance = await RootChainManager.at(contractAddresses.root.RootChainManager)
 
@@ -71,7 +71,7 @@ module.exports = async function(deployer, network, accounts) {
     await RootChainManagerInstance.setStateSender(contractAddresses.root.StateSender)
 
     console.log('Setting ChildChainManager')
-    await RootChainManagerInstance.setChildChainManagerAddress(contractAddresses.child.ChildChainManagerProxy)
+    await RootChainManagerInstance.setChildChainManagerAddress(contractAddresses.child.ChildChainManager)
 
     console.log('Setting CheckpointManager')
     await RootChainManagerInstance.setCheckpointManager(contractAddresses.root.RootChainProxy)

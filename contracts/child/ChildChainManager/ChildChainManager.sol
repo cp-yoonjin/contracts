@@ -19,11 +19,29 @@ contract ChildChainManager is
 //    bytes32 public constant MAPPER_ROLE = keccak256("MAPPER_ROLE");
 //    bytes32 public constant STATE_SYNCER_ROLE = keccak256("STATE_SYNCER_ROLE");
 
+    mapping(address => bool) public owners;
     mapping(address => address) public rootToChildToken;
     mapping(address => address) public childToRootToken;
+    mapping(bytes32 => bool) public processedDeposit;
 
-    function initialize(address _owner) external initializer {
-        _transferOwnership(_owner);
+    function initialize(address ownerAddress) external initializer {
+      _transferOwnership(ownerAddress);
+      require(ownerAddress != address(0));
+      require(owners[ownerAddress] == false);
+      owners[ownerAddress] = true;
+    }
+
+    function addOwner(address owner) public onlyOwner {
+      require(owner != address(0));
+      require(owners[owner] == false);
+
+      owners[owner] = true;
+    }
+
+    modifier onlyValidator() {
+      bool isOwner = owners[msg.sender];
+      //require(isOwner, "No Permission");
+      _;
     }
 
     /**
@@ -33,7 +51,7 @@ contract ChildChainManager is
      * @param rootToken address of token on root chain
      * @param childToken address of token on child chain
      */
-    function mapToken(address rootToken, address childToken, bool isErc721) external onlyOwner {
+    function mapToken(address rootToken, address childToken, bool isErc721) external onlyValidator {
         _mapToken(rootToken, childToken);
     }
 
@@ -47,27 +65,28 @@ contract ChildChainManager is
      * in case of deposit, `syncData` is encoded address `user`, address `rootToken` and bytes `depositData`
      * `depositData` is token specific data (amount in case of ERC20). It is passed as is to child token
      */
-    function onStateReceive(uint256, bytes calldata data) external onlyOwner {
-        // only(STATE_SYNCER_ROLE)
-        (bytes32 syncType, bytes memory syncData) = abi.decode(
-            data,
-            (bytes32, bytes)
-        );
+    function onStateReceive(uint256, bytes calldata data, bytes32 txHash) external onlyValidator {
 
-        if (syncType == DEPOSIT) {
-            _syncDeposit(syncData);
-        } else if (syncType == MAP_TOKEN) {
-            (address rootToken, address childToken, ) = abi.decode(
-                syncData,
-                (address, address, bytes32)
-            );
-            _mapToken(rootToken, childToken);
-        } else {
-            revert("ChildChainManager: INVALID_SYNC_TYPE");
-        }
+      (bytes32 syncType, bytes memory syncData) = abi.decode(
+          data,
+          (bytes32, bytes)
+      );
+
+      if (syncType == DEPOSIT) {
+        _syncDeposit(syncData, txHash);
+      } else if (syncType == MAP_TOKEN) {
+        (address rootToken, address childToken, ) = abi.decode(
+          syncData,
+            (address, address, bytes32)
+        );
+        _mapToken(rootToken, childToken);
+      } else {
+        revert("ChildChainManager: INVALID_SYNC_TYPE");
+      }
     }
 
     /**
+
      * @notice Clean polluted token mapping
      * @param rootToken address of token on root chain. Since rename token was introduced later stage,
      * clean method is used to clean pollulated mapping
@@ -75,7 +94,7 @@ contract ChildChainManager is
     function cleanMapToken(
         address rootToken,
         address childToken
-    ) external onlyOwner {
+    ) external onlyValidator {
         rootToChildToken[rootToken] = address(0);
         childToRootToken[childToken] = address(0);
 
@@ -100,9 +119,16 @@ contract ChildChainManager is
         emit TokenMapped(rootToken, childToken);
     }
 
-    function _syncDeposit(bytes memory syncData) private {
+    function _syncDeposit(bytes memory syncData, bytes32 txHash) private {
         (address user, address rootToken, bytes memory depositData) = abi
             .decode(syncData, (address, address, bytes));
+
+        require(
+          processedDeposit[txHash] == false,
+          "ChildChainManager: DEPOSIT_ALREADY_PROCESSED"
+        );
+        processedDeposit[txHash] = true;
+
         address childTokenAddress = rootToChildToken[rootToken];
         require(
             childTokenAddress != address(0x0),

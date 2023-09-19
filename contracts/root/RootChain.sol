@@ -67,9 +67,9 @@ contract RootChain is RootChainStorage, IRootChain {
         return headerBlocks[currentHeaderBlock()].end;
     }
 
-    function slash() external {
-        //TODO: future implementation
-    }
+//    function slash() external {
+//        //TODO: future implementation
+//    }
 
     function currentHeaderBlock() public view returns (uint256) {
         return _nextHeaderBlock.sub(MAX_DEPOSITS);
