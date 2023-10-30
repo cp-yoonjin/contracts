@@ -7,15 +7,15 @@ import "../RootChainStorage.sol";
 import "../RootChain.sol";
 
 contract RootChainManagerStorageTest is ProxyStorage {
-    mapping(bytes32 => address) public typeToPredicate;
-    mapping(address => address) public rootToChildToken;
-    mapping(address => address) public childToRootToken;
-    mapping(address => bytes32) public tokenToType;
-    mapping(bytes32 => bool) public processedExits;
-    IStateSender internal _stateSender;
-    // RootChainStorage internal _rootChainStorage;
-    RootChain internal _rootChainStorage;
-    address public childChainManagerAddress;
+  mapping(bytes32 => address) public typeToPredicate;
+  mapping(address => address) public rootToChildToken;
+  mapping(address => address) public childToRootToken;
+  mapping(address => bytes32) public tokenToType;
+  mapping(bytes32 => bool) public processedExits;
+  IStateSender internal _stateSender;
+  // RootChainStorage internal _rootChainStorage;
+  RootChain internal _rootChainStorage;
+  address public childChainManagerAddress;
 }
 
 //contract RootChainStorage is ProxyStorage, RootChainHeader, ChainIdMixin {

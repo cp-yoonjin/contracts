@@ -195,3 +195,4 @@ contract RootChainManagerTest is RootChainManagerStorageTest, RootChainStorage {
   }
 
 }
+
