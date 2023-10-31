@@ -25,6 +25,8 @@ module.exports = async function(deployer, network, accounts) {
 
     const ChildChainManagerInstance = await ChildChainManager.at(ChildChainManagerProxy.address)
     await ChildChainManagerInstance.mapToken(contractAddresses.root.tokens.META, MetaLockable.address, false)
+    await ChildChainManagerInstance.addOwner('0x389ab611D50cE003c657CbF91C4Fd8AD955edA1C')
+    await ChildChainManagerInstance.addOwner('0xb3770C7cda4453B21ee4fB3ED92E472E481e32d6')
 
     contractAddresses.child = {
       ChildChainManager: ChildChainManager.address,
@@ -37,3 +39,4 @@ module.exports = async function(deployer, network, accounts) {
     utils.writeContractAddresses(contractAddresses)
   })
 }
+

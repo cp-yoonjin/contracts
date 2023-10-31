@@ -8,8 +8,7 @@ contract META is ERC20, Ownable {
     string private _name;
     string private _symbol;
     uint8 private _decimals = 18;
-    uint256 private value = 1000 * (10**18);
-    // uint256 private value = 10**10 * (10**18);
+    uint256 private value = 10**7 * (10**18); // + 1 * (10**18)
 
     address public minter;
 
