@@ -23,14 +23,7 @@ module.exports = async function(deployer, network, accounts) {
     console.log('* contractAddresses.root.tokens.META: ', contractAddresses.root.tokens.META)
     await metaLockable.initialize(ChildChainManager.address, contractAddresses.root.tokens.META)
 
-    // TODO contract address 수정 0x0000000000000000000000000000000000001010 -> a
-    // const meta = await MetaLockable.at('0x0000000000000000000000000000000000001010')
-    // const metaOwner = await meta.owner()
-    // if (metaOwner === '0x0000000000000000000000000000000000000000') {
-    //   await meta.initialize(ChildChainManager.address, contractAddresses.root.tokens.META)
-    // }
-
-    const ChildChainManagerInstance = await ChildChainManager.at(ChildChainManager.address)
+    const ChildChainManagerInstance = await ChildChainManager.at(ChildChainManagerProxy.address)
     await ChildChainManagerInstance.mapToken(contractAddresses.root.tokens.META, MetaLockable.address, false)
 
     contractAddresses.child = {

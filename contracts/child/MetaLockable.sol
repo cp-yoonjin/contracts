@@ -1,8 +1,5 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./BaseERC20NoSig.sol";
-//import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-//import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";

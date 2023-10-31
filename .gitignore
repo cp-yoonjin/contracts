@@ -2,8 +2,7 @@ node_modules
 build
 contractAddresses.json
 
-# ignore generated files
-contracts/root/predicates/TransferWithSigUtils.sol
+# ignore generated filescontracts/root/predicates/TransferWithSigUtils.sol
 contracts/common/mixin/ChainIdMixin.sol
 test-blockchain/genesis.json
 test-blockchain/start.sh

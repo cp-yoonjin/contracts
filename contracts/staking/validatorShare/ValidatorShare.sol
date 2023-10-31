@@ -111,10 +111,10 @@ contract ValidatorShare is IValidatorShare, ERC20NonTradable, OwnableLockable, I
 
     function buyVoucher(uint256 _amount, uint256 _minSharesToMint) public returns(uint256 amountToDeposit) {
         _withdrawAndTransferReward(msg.sender);
-        
+
         amountToDeposit = _buyShares(_amount, _minSharesToMint, msg.sender);
         require(stakeManager.delegationDeposit(validatorId, amountToDeposit, msg.sender), "deposit failed");
-        
+
         return amountToDeposit;
     }
 
@@ -140,7 +140,7 @@ contract ValidatorShare is IValidatorShare, ERC20NonTradable, OwnableLockable, I
             (uint256 totalStaked, ) = getTotalStake(user);
             stakingLogger.logDelegatorRestaked(validatorId, user, totalStaked);
         }
-        
+
         return (amountRestaked, liquidReward);
     }
 
@@ -323,7 +323,7 @@ contract ValidatorShare is IValidatorShare, ERC20NonTradable, OwnableLockable, I
         uint256 _rewardPerShare = rewardPerShare;
         if (accumulatedReward != 0) {
             uint256 totalShares = totalSupply();
-            
+
             if (totalShares != 0) {
                 _rewardPerShare = _rewardPerShare.add(accumulatedReward.mul(REWARD_PRECISION).div(totalShares));
             }
@@ -352,7 +352,7 @@ contract ValidatorShare is IValidatorShare, ERC20NonTradable, OwnableLockable, I
             stakeManager.withdrawDelegatorsReward(validatorId)
         );
         uint256 liquidRewards = _calculateReward(user, _rewardPerShare);
-        
+
         rewardPerShare = _rewardPerShare;
         initalRewardPerShare[user] = _rewardPerShare;
         return liquidRewards;
@@ -400,7 +400,7 @@ contract ValidatorShare is IValidatorShare, ERC20NonTradable, OwnableLockable, I
         address to,
         uint256 value
     ) internal {
-        // get rewards for recipient 
+        // get rewards for recipient
         _withdrawAndTransferReward(to);
         // convert rewards to shares
         _withdrawAndTransferReward(from);
