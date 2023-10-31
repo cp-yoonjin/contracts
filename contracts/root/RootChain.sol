@@ -21,11 +21,6 @@ contract RootChain is RootChainStorage, IRootChain, Initializable {
     _nextHeaderBlock = _nextHeaderBlock.add(MAX_DEPOSITS);
   }
 
-  modifier onlyDepositManager() {
-    require(msg.sender == registry.getDepositManagerAddress(), "UNAUTHORIZED_DEPOSIT_MANAGER_ONLY");
-    _;
-  }
-
   function submitHeaderBlock(bytes calldata data, bytes calldata sigs) external {
     revert();
   }
@@ -56,17 +51,6 @@ contract RootChain is RootChainStorage, IRootChain, Initializable {
     emit NewHeaderBlock(proposer, _nextHeaderBlock, _reward, start, end, rootHash);
     _nextHeaderBlock = _nextHeaderBlock.add(MAX_DEPOSITS);
     _blockDepositId = 1;
-  }
-
-  function updateDepositId(uint256 numDeposits) external onlyDepositManager returns (uint256 depositId) {
-    depositId = currentHeaderBlock().add(_blockDepositId);
-    // deposit ids will be (_blockDepositId, _blockDepositId + 1, .... _blockDepositId + numDeposits - 1)
-    _blockDepositId = _blockDepositId.add(numDeposits);
-    require(
-    // Since _blockDepositId is initialized to 1; only (MAX_DEPOSITS - 1) deposits per header block are allowed
-      _blockDepositId <= MAX_DEPOSITS,
-      "TOO_MANY_DEPOSITS"
-    );
   }
 
   function getLastChildBlock() external view returns (uint256) {

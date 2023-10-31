@@ -1,8 +1,5 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./BaseERC20NoSig.sol";
-//import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-//import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
@@ -13,7 +10,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
  * @notice This contract is an ECR20 like wrapper over native ether (matic token) transfers on the matic chain
  * @dev ERC20 methods have been made payable while keeping their method signature same as other ChildERC20s on Matic
  */
-contract MetaLockable is Ownable {
+contract MetaLocker is Ownable {
   // event Transfer(address indexed from, address indexed to, uint256 value);
 
   event Deposit(

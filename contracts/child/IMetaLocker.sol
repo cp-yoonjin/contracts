@@ -2,7 +2,7 @@ pragma solidity ^0.5.2;
 
 import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
 
-interface IMetaLockable {
+interface IMetaLocker {
 
     event Deposit(address indexed token, address indexed from, uint256 amount, uint256 input1, uint256 output1);
     event Withdraw(address indexed token, address indexed from, uint256 amount, uint256 input1, uint256 output1);

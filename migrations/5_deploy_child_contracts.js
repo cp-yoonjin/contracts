@@ -2,7 +2,7 @@ const utils = require('./utils')
 
 const ChildChainManager = artifacts.require('ChildChainManager')
 const ChildChainManagerProxy = artifacts.require('ChildChainManagerProxy')
-const MetaLockable = artifacts.require('MetaLockable')
+const MetaLocker = artifacts.require('MetaLocker')
 
 module.exports = async function(deployer, network, accounts) {
   console.log(deployer.network)
@@ -17,14 +17,14 @@ module.exports = async function(deployer, network, accounts) {
 
     const contractAddresses = utils.getContractAddresses()
 
-    await deployer.deploy(MetaLockable)
-    const metaLockable = await MetaLockable.at(MetaLockable.address)
+    await deployer.deploy(MetaLocker)
+    const metaLockable = await MetaLocker.at(MetaLocker.address)
     console.log('* ChildChainManager.address: ', ChildChainManager.address)
     console.log('* contractAddresses.root.tokens.META: ', contractAddresses.root.tokens.META)
     await metaLockable.initialize(ChildChainManager.address, contractAddresses.root.tokens.META)
 
     const ChildChainManagerInstance = await ChildChainManager.at(ChildChainManagerProxy.address)
-    await ChildChainManagerInstance.mapToken(contractAddresses.root.tokens.META, MetaLockable.address, false)
+    await ChildChainManagerInstance.mapToken(contractAddresses.root.tokens.META, MetaLocker.address, false)
     await ChildChainManagerInstance.addOwner('0x389ab611D50cE003c657CbF91C4Fd8AD955edA1C')
     await ChildChainManagerInstance.addOwner('0xb3770C7cda4453B21ee4fB3ED92E472E481e32d6')
 
@@ -32,7 +32,7 @@ module.exports = async function(deployer, network, accounts) {
       ChildChainManager: ChildChainManager.address,
       ChildChainManagerProxy: ChildChainManagerProxy.address,
       tokens: {
-        META: MetaLockable.address
+        META: MetaLocker.address
       }
     }
     console.log(contractAddresses.child)

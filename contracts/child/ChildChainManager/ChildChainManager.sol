@@ -3,7 +3,7 @@ pragma solidity ^0.5.2;
 import {IERC20} from "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import {IChildChainManager} from "./IChildChainManager.sol";
-import {IMetaLockable} from "../IMetaLockable.sol";
+import {IMetaLocker} from "../IMetaLocker.sol";
 import {Initializable} from "../../common/mixin/Initializable.sol";
 import {IStateReceiver} from "../bor/IStateReceiver.sol";
 
@@ -137,7 +137,7 @@ IStateReceiver
 
     uint256 amount = abi.decode(depositData, (uint256));
 
-    IMetaLockable childTokenContract = IMetaLockable(childTokenAddress);
+    IMetaLocker childTokenContract = IMetaLocker(childTokenAddress);
     childTokenContract.deposit(user, amount);
   }
 }

@@ -4,7 +4,6 @@ const utils = require('./utils')
 const { bufferToHex, rlp, toBuffer, BN, keccak256 } = require('ethereumjs-util')
 const Trie = require('merkle-patricia-tree')
 const { Buffer } = require('safe-buffer')
-const MetaLockable = artifacts.require('MetaLockable')
 const RootChainManagerTest = artifacts.require('RootChainManagerTest')
 
 module.exports = async function(deployer, network, accounts) {
